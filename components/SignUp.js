@@ -1,9 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import * as firebase from "firebase";
+import { AsyncStorage } from "react-native";
 
 export default class SignUp extends React.Component {
   state = { email: "", password: "", errorMessage: null };
+  componentDidMount() {
+    //const value=AsyncStorage.gettItem("key");
+    //if (value !== null){}
+  }
   handleSignUp = () => {
     firebase
       .auth()

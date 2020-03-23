@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Platform, Button, Image, Text, View } from "react-native";
 import * as firebase from "firebase";
+import { AsyncStorage } from "react-native";
 
 export default class Main extends React.Component {
   state = { currentUser: null };
@@ -12,7 +13,10 @@ export default class Main extends React.Component {
     firebase
       .auth()
       .signOut()
-      .then(() => this.props.navigation.navigate("Login"));
+      .then(() => {
+        // AsyncStorage.removeItem("key");
+        this.props.navigation.navigate("Login");
+      });
   };
   render() {
     const { currentUser } = this.state;
