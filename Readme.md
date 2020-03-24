@@ -1,6 +1,8 @@
 1. expo init <project_name>
 
-2. Used Firebase for authentication
+2. Used Firebase for authentication - Email, Phone
+
+3. Install React-navigation packages
 
 # Some Learning (REACT-NATIVE)
 
