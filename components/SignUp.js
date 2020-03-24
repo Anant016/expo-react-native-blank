@@ -6,9 +6,17 @@ import { AsyncStorage } from "react-native";
 export default class SignUp extends React.Component {
   state = { email: "", password: "", errorMessage: null };
   componentDidMount() {
-    //const value=AsyncStorage.gettItem("key");
+    //1.
+    // const value=AsyncStorage.gettItem("key");
     //if (value !== null){}
+    //2.
+    // firebase.auth().onAuthStateChanged(user => {
+    //   if (user != null) {
+    //     console.log("We are authenticated now!");
+    //   }
+    // });
   }
+
   handleSignUp = () => {
     firebase
       .auth()
@@ -42,6 +50,10 @@ export default class SignUp extends React.Component {
         <Button
           title="Already have an account? Login"
           onPress={() => this.props.navigation.navigate("Login")}
+        />
+        <Button
+          title="Login via OTP"
+          onPress={() => this.props.navigation.navigate("Otp")}
         />
       </View>
     );
