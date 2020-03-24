@@ -4,6 +4,10 @@
 
 3. Install React-navigation packages
 
+4. Tab Navigation
+
+5. Drawer navigation
+
 # Some Learning (REACT-NATIVE)
 
 https://docs.expo.io/versions/v36.0.0/react-native/tutorial/

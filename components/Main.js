@@ -1,7 +1,7 @@
 import React from "react";
 import {
   StyleSheet,
-  Platform,
+  Iconoi,
   Button,
   TextInput,
   Text,
@@ -9,11 +9,17 @@ import {
 } from "react-native";
 import * as firebase from "firebase";
 import { AsyncStorage } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 function HomeieScreen({ navigation, route }) {
   const [count, setCount] = React.useState(0);
@@ -45,6 +51,8 @@ function HomeieScreen({ navigation, route }) {
         title="Home post"
         onPress={() => navigation.navigate("Home_Post")}
       />
+      <Button title="Tab" onPress={() => navigation.navigate("Tab")} />
+      <Button title="Drawer" onPress={() => navigation.navigate("Drawer")} />
     </View>
   );
 }
@@ -122,15 +130,78 @@ function CreatePostScreen({ navigation, route }) {
 //   );
 // }
 
-function Inside() {
+function TabScreen() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Feed" component={HomeScreen} />
-      <Tab.Screen name="Messages" component={HomeScreen} />
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "Home") {
+            iconName = focused
+              ? "ios-information-circle"
+              : "ios-information-circle-outline";
+          } else if (route.name === "Settings") {
+            iconName = focused ? "ios-list-box" : "ios-list";
+          }
+
+          // return <Ionicons name={iconName} size={size} color={color} />;
+          return (
+            <IconWithBadge
+              badgeCount={3}
+              name={iconName}
+              size={size}
+              color={color}
+            />
+          );
+        }
+      })}
+      tabBarOptions={{
+        activeTintColor: "tomato",
+        inactiveTintColor: "gray"
+      }}
+    >
+      <Tab.Screen name="Home" component={CreatePostScreen} />
+      <Tab.Screen name="Settings" component={HomeScreen} />
     </Tab.Navigator>
   );
 }
+function IconWithBadge({ name, badgeCount, color, size }) {
+  return (
+    <View style={{ width: 24, height: 24, margin: 5 }}>
+      <Ionicons name={name} size={size} color={color} />
+      {badgeCount > 0 && (
+        <View
+          style={{
+            // On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
+            position: "absolute",
+            right: -6,
+            top: -3,
+            backgroundColor: "red",
+            borderRadius: 6,
+            width: 12,
+            height: 12,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 10, fontWeight: "bold" }}>
+            {badgeCount}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+}
 
+function DrawerScreen() {
+  return (
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Homie" component={HomeieScreen} />
+    </Drawer.Navigator>
+  );
+}
 export default class Main extends React.Component {
   state = { currentUser: null };
   componentDidMount() {
@@ -152,7 +223,9 @@ export default class Main extends React.Component {
       // <Text>Hi {currentUser && currentUser.email}!</Text>
       // <Button title="Logout" onPress={this.logoutUser} />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+        // mode="modal"
+        >
           <Stack.Screen
             name="Home"
             component={HomeieScreen}
@@ -177,10 +250,11 @@ export default class Main extends React.Component {
             initialParams={currentUser}
           />
           <Stack.Screen name="Details" component={DetailsScreen} />
-          <Stack.Screen name="Home_Post" component={HomeScreen} />
-          <Stack.Screen name="Create_Post" component={CreatePostScreen} />
 
-          <Stack.Screen name="Inside" component={Inside} />
+          <Stack.Screen name="Create_Post" component={CreatePostScreen} />
+          <Stack.Screen name="Home_Post" component={HomeScreen} />
+          <Stack.Screen name="Tab" component={TabScreen} />
+          <Stack.Screen name="Drawer" component={DrawerScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
